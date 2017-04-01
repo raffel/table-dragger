@@ -38,7 +38,7 @@
   "dependencies": {
     "babel-runtime": "^6.20.0",
     "crossvent": "^1.5.5",
-    "dragula": "https://github.com/raffel/dragula.git#a61f7f9e72c01afa949a6cf3a6b297c7f6ffc3f2"
+    "dragula": "https://github.com/raffel/dragula.git#3db5e183ccfb298d5ee62c8c0aefdba635bad481"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
