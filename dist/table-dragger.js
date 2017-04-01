@@ -88,8 +88,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/.npminstall/css-loader/0.26.1/css-loader/index.js!./main.css", function() {
-				var newContent = require("!!./../node_modules/.npminstall/css-loader/0.26.1/css-loader/index.js!./main.css");
+			module.hot.accept("!!../node_modules/css-loader/index.js!./main.css", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!./main.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -185,7 +185,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			};
 		},
 		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+			return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 		}),
 		getHeadElement = memoize(function () {
 			return document.head || document.getElementsByTagName("head")[0];
@@ -458,11 +458,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _draggableList2 = _interopRequireDefault(_draggableList);
 	
-	var _classes = __webpack_require__(107);
+	var _classes = __webpack_require__(108);
 	
 	var _classes2 = _interopRequireDefault(_classes);
 	
-	var _util = __webpack_require__(108);
+	var _util = __webpack_require__(109);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2375,15 +2375,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _dragulaWithAnimation = __webpack_require__(96);
+	var _dragula = __webpack_require__(96);
 	
-	var _dragulaWithAnimation2 = _interopRequireDefault(_dragulaWithAnimation);
+	var _dragula2 = _interopRequireDefault(_dragula);
 	
-	var _classes = __webpack_require__(107);
+	var _classes = __webpack_require__(108);
 	
 	var _classes2 = _interopRequireDefault(_classes);
 	
-	var _util = __webpack_require__(108);
+	var _util = __webpack_require__(109);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2420,8 +2420,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return previous.appendChild(li) && previous;
 	    }, document.createElement('ul'));
 	
-	    this.drake = (0, _dragulaWithAnimation2.default)([this.el], {
+	    this.drake = (0, _dragula2.default)([this.el], {
 	      animation: 300,
+	      axis: 'x',
 	      staticClass: _classes2.default.static,
 	      direction: mode === 'column' ? 'horizontal' : 'vertical'
 	    }).on('drag', this.onDrag).on('dragend', this.onDragend).on('shadow', this.onShadow).on('out', this.onOut);
@@ -2636,7 +2637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    });
 	
-	    var organ = row.parentNode.cloneNode();
+	    var organ = row.parentElement.cloneNode();
 	    organ.innerHTML = '';
 	    organ.appendChild(row.cloneNode(true));
 	    cTable.appendChild(organ);
@@ -2661,8 +2662,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
 	var emitter = __webpack_require__(97);
-	var crossvent = __webpack_require__(103);
-	var classes = __webpack_require__(106);
+	var crossvent = __webpack_require__(104);
+	var classes = __webpack_require__(107);
 	var doc = document;
 	var documentElement = doc.documentElement;
 	var oldCoord = 0;
@@ -2680,6 +2681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var _offsetY; // reference y
 	  var _moveX; // reference move x
 	  var _moveY; // reference move y
+	  var _initialPos; // reference position for axis
 	  var _initialSibling; // reference sibling when grabbed
 	  var _currentSibling; // reference sibling now
 	  var _copy; // item used for copying
@@ -2688,6 +2690,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var _grabbed; // holds mousedown context until first mousemove
 	
 	  var o = options || {};
+	  if (o.axis === void 0) {
+	    o.axis = 'none';
+	  }
 	  if (o.moves === void 0) {
 	    o.moves = always;
 	  }
@@ -2837,6 +2842,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var offset = getOffset(_item);
 	    _offsetX = getCoord('pageX', e) - offset.left;
 	    _offsetY = getCoord('pageY', e) - offset.top;
+	
+	    switch (o.axis) {
+	      case 'x':
+	        _initialPos = offset.top;
+	        break;
+	      case 'y':
+	        _initialPos = offset.left;
+	        break;
+	    }
 	
 	    classes.add(_copy || _item, 'gu-transit');
 	    renderMirrorImage();
@@ -3058,8 +3072,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var x = clientX - _offsetX;
 	    var y = clientY - _offsetY;
 	
-	    _mirror.style.left = x + 'px';
-	    _mirror.style.top = y + 'px';
+	    _mirror.style.left = (/y/.test(o.axis) && _initialPos ? _initialPos : x) + 'px';
+	    _mirror.style.top = (/x/.test(o.axis) && _initialPos ? _initialPos : y) + 'px';
 	
 	    var item = _copy || _item;
 	    var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
@@ -3504,11 +3518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(102).nextTick;
 	var apply = Function.prototype.apply;
-	var slice = Array.prototype.slice;
-	var immediateIds = {};
-	var nextImmediateId = 0;
 	
 	// DOM APIs, for completeness
 	
@@ -3519,7 +3529,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
 	};
 	exports.clearTimeout =
-	exports.clearInterval = function(timeout) { timeout.close(); };
+	exports.clearInterval = function(timeout) {
+	  if (timeout) {
+	    timeout.close();
+	  }
+	};
 	
 	function Timeout(id, clearFn) {
 	  this._id = id;
@@ -3553,37 +3567,207 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 	
-	// That's not how node.js implements it but the exposed api is the same.
-	exports.setImmediate = typeof setImmediate === "function" ? setImmediate : function(fn) {
-	  var id = nextImmediateId++;
-	  var args = arguments.length < 2 ? false : slice.call(arguments, 1);
-	
-	  immediateIds[id] = true;
-	
-	  nextTick(function onNextTick() {
-	    if (immediateIds[id]) {
-	      // fn.call() is faster so we optimize for the common use-case
-	      // @see http://jsperf.com/call-apply-segu
-	      if (args) {
-	        fn.apply(null, args);
-	      } else {
-	        fn.call(null);
-	      }
-	      // Prevent ids from leaking
-	      exports.clearImmediate(id);
-	    }
-	  });
-	
-	  return id;
-	};
-	
-	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
-	  delete immediateIds[id];
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(101).setImmediate, __webpack_require__(101).clearImmediate))
+	// setimmediate attaches itself to the global object
+	__webpack_require__(102);
+	exports.setImmediate = setImmediate;
+	exports.clearImmediate = clearImmediate;
+
 
 /***/ },
 /* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+	    "use strict";
+	
+	    if (global.setImmediate) {
+	        return;
+	    }
+	
+	    var nextHandle = 1; // Spec says greater than zero
+	    var tasksByHandle = {};
+	    var currentlyRunningATask = false;
+	    var doc = global.document;
+	    var registerImmediate;
+	
+	    function setImmediate(callback) {
+	      // Callback can either be a function or a string
+	      if (typeof callback !== "function") {
+	        callback = new Function("" + callback);
+	      }
+	      // Copy function arguments
+	      var args = new Array(arguments.length - 1);
+	      for (var i = 0; i < args.length; i++) {
+	          args[i] = arguments[i + 1];
+	      }
+	      // Store and register the task
+	      var task = { callback: callback, args: args };
+	      tasksByHandle[nextHandle] = task;
+	      registerImmediate(nextHandle);
+	      return nextHandle++;
+	    }
+	
+	    function clearImmediate(handle) {
+	        delete tasksByHandle[handle];
+	    }
+	
+	    function run(task) {
+	        var callback = task.callback;
+	        var args = task.args;
+	        switch (args.length) {
+	        case 0:
+	            callback();
+	            break;
+	        case 1:
+	            callback(args[0]);
+	            break;
+	        case 2:
+	            callback(args[0], args[1]);
+	            break;
+	        case 3:
+	            callback(args[0], args[1], args[2]);
+	            break;
+	        default:
+	            callback.apply(undefined, args);
+	            break;
+	        }
+	    }
+	
+	    function runIfPresent(handle) {
+	        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+	        // So if we're currently running a task, we'll need to delay this invocation.
+	        if (currentlyRunningATask) {
+	            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+	            // "too much recursion" error.
+	            setTimeout(runIfPresent, 0, handle);
+	        } else {
+	            var task = tasksByHandle[handle];
+	            if (task) {
+	                currentlyRunningATask = true;
+	                try {
+	                    run(task);
+	                } finally {
+	                    clearImmediate(handle);
+	                    currentlyRunningATask = false;
+	                }
+	            }
+	        }
+	    }
+	
+	    function installNextTickImplementation() {
+	        registerImmediate = function(handle) {
+	            process.nextTick(function () { runIfPresent(handle); });
+	        };
+	    }
+	
+	    function canUsePostMessage() {
+	        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+	        // where `global.postMessage` means something completely different and can't be used for this purpose.
+	        if (global.postMessage && !global.importScripts) {
+	            var postMessageIsAsynchronous = true;
+	            var oldOnMessage = global.onmessage;
+	            global.onmessage = function() {
+	                postMessageIsAsynchronous = false;
+	            };
+	            global.postMessage("", "*");
+	            global.onmessage = oldOnMessage;
+	            return postMessageIsAsynchronous;
+	        }
+	    }
+	
+	    function installPostMessageImplementation() {
+	        // Installs an event handler on `global` for the `message` event: see
+	        // * https://developer.mozilla.org/en/DOM/window.postMessage
+	        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+	
+	        var messagePrefix = "setImmediate$" + Math.random() + "$";
+	        var onGlobalMessage = function(event) {
+	            if (event.source === global &&
+	                typeof event.data === "string" &&
+	                event.data.indexOf(messagePrefix) === 0) {
+	                runIfPresent(+event.data.slice(messagePrefix.length));
+	            }
+	        };
+	
+	        if (global.addEventListener) {
+	            global.addEventListener("message", onGlobalMessage, false);
+	        } else {
+	            global.attachEvent("onmessage", onGlobalMessage);
+	        }
+	
+	        registerImmediate = function(handle) {
+	            global.postMessage(messagePrefix + handle, "*");
+	        };
+	    }
+	
+	    function installMessageChannelImplementation() {
+	        var channel = new MessageChannel();
+	        channel.port1.onmessage = function(event) {
+	            var handle = event.data;
+	            runIfPresent(handle);
+	        };
+	
+	        registerImmediate = function(handle) {
+	            channel.port2.postMessage(handle);
+	        };
+	    }
+	
+	    function installReadyStateChangeImplementation() {
+	        var html = doc.documentElement;
+	        registerImmediate = function(handle) {
+	            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+	            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+	            var script = doc.createElement("script");
+	            script.onreadystatechange = function () {
+	                runIfPresent(handle);
+	                script.onreadystatechange = null;
+	                html.removeChild(script);
+	                script = null;
+	            };
+	            html.appendChild(script);
+	        };
+	    }
+	
+	    function installSetTimeoutImplementation() {
+	        registerImmediate = function(handle) {
+	            setTimeout(runIfPresent, 0, handle);
+	        };
+	    }
+	
+	    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+	    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+	    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+	
+	    // Don't get fooled by e.g. browserify environments.
+	    if ({}.toString.call(global.process) === "[object process]") {
+	        // For Node.js before 0.9
+	        installNextTickImplementation();
+	
+	    } else if (canUsePostMessage()) {
+	        // For non-IE10 modern browsers
+	        installPostMessageImplementation();
+	
+	    } else if (global.MessageChannel) {
+	        // For web workers, where supported
+	        installMessageChannelImplementation();
+	
+	    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+	        // For IE 6–8
+	        installReadyStateChangeImplementation();
+	
+	    } else {
+	        // For older browsers
+	        installSetTimeoutImplementation();
+	    }
+	
+	    attachTo.setImmediate = setImmediate;
+	    attachTo.clearImmediate = clearImmediate;
+	}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(103)))
+
+/***/ },
+/* 103 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -3769,13 +3953,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var customEvent = __webpack_require__(104);
-	var eventmap = __webpack_require__(105);
+	var customEvent = __webpack_require__(105);
+	var eventmap = __webpack_require__(106);
 	var doc = global.document;
 	var addEvent = addEventEasy;
 	var removeEvent = removeEventEasy;
@@ -3877,7 +4061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -3932,7 +4116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -3952,7 +4136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3991,7 +4175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4008,7 +4192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4018,7 +4202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.getScrollBarWidth = exports.sort = exports.insertBeforeSibling = exports.appendSibling = exports.remove = exports.on = exports.empty = exports.css = exports.getLongestRow = exports.touchy = exports.getTouchyEvent = undefined;
 	
-	var _keys = __webpack_require__(109);
+	var _keys = __webpack_require__(110);
 	
 	var _keys2 = _interopRequireDefault(_keys);
 	
@@ -4026,7 +4210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _from2 = _interopRequireDefault(_from);
 	
-	var _crossvent = __webpack_require__(113);
+	var _crossvent = __webpack_require__(114);
 	
 	var _crossvent2 = _interopRequireDefault(_crossvent);
 	
@@ -4045,18 +4229,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var getTouchyEvent = exports.getTouchyEvent = function getTouchyEvent() {
+	  var event = void 0;
 	  if (global.navigator.pointerEnabled) {
-	    return new PointerEvent('pointerdown', {
-	      cancelable: true,
-	      bubbles: true,
-	      view: window
+	    if (document.createEvent) {
+	      event = document.createEvent("PointerEvent");
+	      event.initMouseEvent("pointerdown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	    } else {
+	      event = new PointerEvent('pointerdown', {
+	        cancelable: true,
+	        bubbles: true,
+	        view: window
+	      });
+	    }
+	  }
+	  if (document.createEvent) {
+	    event = document.createEvent("MouseEvent");
+	    event.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	  } else {
+	    event = new MouseEvent('mousedown', {
+	      'view': window,
+	      'bubbles': true,
+	      'cancelable': true
 	    });
 	  }
-	  return new MouseEvent('mousedown', {
-	    cancelable: true,
-	    bubbles: true,
-	    view: window
-	  });
+	  return event;
 	};
 	
 	var touchy = exports.touchy = function touchy(el, op, type, fn) {
@@ -4163,34 +4359,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(110), __esModule: true };
-
-/***/ },
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(111);
-	module.exports = __webpack_require__(17).Object.keys;
+	module.exports = { "default": __webpack_require__(111), __esModule: true };
 
 /***/ },
 /* 111 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(112);
+	module.exports = __webpack_require__(17).Object.keys;
+
+/***/ },
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 Object.keys(O)
 	var toObject = __webpack_require__(52)
 	  , $keys    = __webpack_require__(36);
 	
-	__webpack_require__(112)('keys', function(){
+	__webpack_require__(113)('keys', function(){
 	  return function keys(it){
 	    return $keys(toObject(it));
 	  };
 	});
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
@@ -4205,13 +4401,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var customEvent = __webpack_require__(114);
-	var eventmap = __webpack_require__(115);
+	var customEvent = __webpack_require__(115);
+	var eventmap = __webpack_require__(116);
 	var doc = global.document;
 	var addEvent = addEventEasy;
 	var removeEvent = removeEventEasy;
@@ -4313,7 +4509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -4368,7 +4564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';

@@ -1,7 +1,7 @@
 /**
  * Created by lijun on 2016/12/8.
  */
-import dragula from 'dragula-with-animation';
+import dragula from 'dragula';
 import classes from './classes';
 import {
   insertBeforeSibling,
@@ -41,6 +41,7 @@ export default class Dragger {
 
     this.drake = dragula([this.el], {
       animation: 300,
+      axis: 'x',
       staticClass: classes.static,
       direction: mode === 'column' ? 'horizontal' : 'vertical',
     })
@@ -102,7 +103,6 @@ export default class Dragger {
     el.children[index].dispatchEvent(getTouchyEvent());
   }
 
-  // TODO li设定宽度，ul overflow-hidden
   renderEl () {
     const { mode, el, originTable: { el: originEl } } = this;
     // const rect = originEl.getBoundingClientRect();
@@ -234,7 +234,7 @@ function buildRowTables (table) {
       }
     });
 
-    const organ = row.parentNode.cloneNode();
+    const organ = row.parentElement.cloneNode();
     organ.innerHTML = '';
     organ.appendChild(row.cloneNode(true));
     cTable.appendChild(organ);
