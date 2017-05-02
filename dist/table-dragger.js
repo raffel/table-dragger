@@ -2601,7 +2601,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	function getColumnAsTableByIndex(table, index) {
-	  var cTable = table.cloneNode(true);
+	  var bodyTable = document.getElementById('bodyTable');
+	  var cTable = bodyTable.cloneNode(true);
+	
+	  $(cTable).find('th').removeClass('zero');
 	  origin2DragItem(cTable);
 	
 	  var cols = cTable.querySelectorAll('col');

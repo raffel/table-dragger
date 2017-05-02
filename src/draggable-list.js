@@ -199,7 +199,11 @@ function origin2DragItem (liTable) {
 }
 
 function getColumnAsTableByIndex (table, index) {
-  const cTable = table.cloneNode(true);
+  // FIXME quick workaround for separate tbody table
+  const bodyTable = document.getElementById('bodyTable');
+  const cTable = bodyTable.cloneNode(true);
+  /* eslint-disable no-undef */
+  $(cTable).find('th').removeClass('zero');
   origin2DragItem(cTable);
 
   const cols = cTable.querySelectorAll('col');
