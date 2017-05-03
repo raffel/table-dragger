@@ -1,6 +1,7 @@
 /**
  * Created by lijun on 2016/12/8.
  */
+    /* eslint-disable */
 import dragula from 'dragula';
 import classes from './classes';
 import {
@@ -34,8 +35,13 @@ export default class Dragger {
 
     // pointfree?
     this.el = fakeTables.reduce((previous, current) => {
+      const scroll = $('div.overflow').scrollTop();
       const li = document.createElement('li');
       li.appendChild(current);
+      const list = li.querySelectorAll('table tbody tr');
+      for (var i = 0; i < list.length; i++) {
+        list[i].style.transform = 'translateY(-' + scroll + 'px)';
+      }
       return previous.appendChild(li) && previous;
     }, document.createElement('ul'));
 
@@ -55,10 +61,6 @@ export default class Dragger {
   }
 
   onDrag () {
-    /* eslint-disable */
-    const scroll = $('div.overflow').scrollTop();
-    const sheet = window.document.styleSheets[0];
-    sheet.insertRule('li table tbody tr { transform: translateY(-' + scroll + 'px); }', sheet.cssRules.length);
     css(document.body, { overflow: 'hidden' });
     const barWidth = getScrollBarWidth();
     this.dragger.dragging = true;
@@ -126,6 +128,7 @@ export default class Dragger {
     const s = window.getComputedStyle(originEl).getPropertyValue('border-spacing').split(' ')[0];
     const attr = mode === 'column' ? 'margin-right' : 'margin-bottom';
     const l = el.children.length;
+    const scroll = $('div.overflow').scrollTop();
     Array.from(el.children).forEach((li, dex) => {
       /* eslint-disable no-param-reassign*/
       const table = li && li.querySelector('table');
@@ -135,6 +138,10 @@ export default class Dragger {
 
       if (s && dex < (l - 1)) {
         li.style[attr] = `-${s}`;
+        const list = li.querySelectorAll('table tbody tr');
+        for (var i = 0; i < list.length; i++) {
+          list[i].style.transform = 'translateY(-' + scroll + 'px)';
+        }
       }
     });
 

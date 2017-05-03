@@ -2415,8 +2415,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	
 	    this.el = fakeTables.reduce(function (previous, current) {
+	      var scroll = $('div.overflow').scrollTop();
 	      var li = document.createElement('li');
 	      li.appendChild(current);
+	      var list = li.querySelectorAll('table tbody tr');
+	      for (var i = 0; i < list.length; i++) {
+	        list[i].style.transform = 'translateY(-' + scroll + 'px)';
+	      }
 	      return previous.appendChild(li) && previous;
 	    }, document.createElement('ul'));
 	
@@ -2434,9 +2439,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  (0, _createClass3.default)(Dragger, [{
 	    key: 'onDrag',
 	    value: function onDrag() {
-	      var scroll = $('div.overflow').scrollTop();
-	      var sheet = window.document.styleSheets[0];
-	      sheet.insertRule('li table tbody tr { transform: translateY(-' + scroll + 'px); }', sheet.cssRules.length);
 	      (0, _util.css)(document.body, { overflow: 'hidden' });
 	      var barWidth = (0, _util.getScrollBarWidth)();
 	      this.dragger.dragging = true;
@@ -2524,6 +2526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var s = window.getComputedStyle(originEl).getPropertyValue('border-spacing').split(' ')[0];
 	      var attr = mode === 'column' ? 'margin-right' : 'margin-bottom';
 	      var l = el.children.length;
+	      var scroll = $('div.overflow').scrollTop();
 	      (0, _from2.default)(el.children).forEach(function (li, dex) {
 	        var table = li && li.querySelector('table');
 	        if (_this3.options.onlyBody && mode === 'row' && !(0, _from2.default)(table.children).some(function (o) {
@@ -2534,6 +2537,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (s && dex < l - 1) {
 	          li.style[attr] = '-' + s;
+	          var list = li.querySelectorAll('table tbody tr');
+	          for (var i = 0; i < list.length; i++) {
+	            list[i].style.transform = 'translateY(-' + scroll + 'px)';
+	          }
 	        }
 	      });
 	
