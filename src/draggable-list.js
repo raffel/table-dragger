@@ -55,6 +55,10 @@ export default class Dragger {
   }
 
   onDrag () {
+    /* eslint-disable */
+    const scroll = $('div.overflow').scrollTop();
+    const sheet = window.document.styleSheets[0];
+    sheet.insertRule('li table tbody tr { transform: translateY(-' + scroll + 'px); }', sheet.cssRules.length);
     css(document.body, { overflow: 'hidden' });
     const barWidth = getScrollBarWidth();
     this.dragger.dragging = true;
